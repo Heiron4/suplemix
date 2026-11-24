@@ -250,6 +250,7 @@ async def secure_headers(req: Request, call_next):
         "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                                    "font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://world.openfoodfacts.org; "
                                    "frame-ancestors 'none'; base-uri 'self'; form-action 'self'"})
+    if req.url.path.startswith(("/docs", "/redoc")): del r.headers["Content-Security-Policy"]   # Swagger UI needs its CDN
     if req.url.path.startswith("/api/"): r.headers["Cache-Control"] = "no-store"
     return r
 
