@@ -1,6 +1,3 @@
-databases:
-  - name: suplemix-db
-    plan: free
 services:
   - type: web
     name: suplemix
@@ -11,10 +8,8 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.3
-      - key: DATABASE_URL
-        fromDatabase:
-          name: suplemix-db
-          property: connectionString
+      - key: DATABASE_URL      # paste your Supabase connection string in Render > Environment
+        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: ADMIN_EMAIL
