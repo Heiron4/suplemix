@@ -136,6 +136,38 @@ body.shell{background:linear-gradient(160deg,#f7eedc,#e9f2e2) fixed}
 .tbl tbody tr{transition:background .2s}.tbl tbody tr:hover{background:rgba(5,87,72,.05)}
 .link{transition:opacity .2s}.link:hover{opacity:.7}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== v3: centered desktop layout, mobile pass, modal/toast ===== */
+html,body{overflow-x:clip}
+#top{display:none}
+.mo{position:fixed;inset:0;z-index:50;background:rgba(3,47,39,.5);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;animation:pop .2s}
+.dlg{width:min(100%,420px);max-height:90dvh;overflow:auto;background:var(--card);border-radius:22px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:up .35s var(--ease)}
+.dlg h2{margin:0 0 4px}.dlg .row{margin-top:16px}.dlg .btn{margin-top:0}
+.chk{margin:6px 0;font-weight:600}.chk.y{color:#0a7a5f}.chk.n{color:var(--err)}
+.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green);box-shadow:none}
+.btn.off{opacity:.45;pointer-events:none}
+.toast{position:fixed;left:0;right:0;margin:auto;width:fit-content;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:60;background:#0F3D33;color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;max-width:90vw;box-shadow:var(--shadow);animation:up .3s var(--ease)}
+.toast.bad{background:var(--err)}
+.pill{display:inline-block;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--mint);color:var(--green)}.pill.bad{background:#f7d9d4;color:var(--err)}
+#nav button{display:flex;align-items:center;gap:12px}
+#nav .py{margin-top:auto;color:#9fd3c0;font-size:12px;padding:0 14px 8px}#nav .out{margin-top:0}
+@media(min-width:801px){
+ body.shell{padding:24px}
+ body.shell #shell{max-width:1240px;margin:0 auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:clip;box-shadow:0 30px 80px rgba(5,87,72,.18);grid-template-columns:240px minmax(0,1fr);background:linear-gradient(180deg,#066350,#043d32) 0 0/240px 100% no-repeat,rgba(255,249,243,.7)}
+ #nav{background:none;position:sticky;top:24px;align-self:start;height:calc(100dvh - 48px)}
+ #view{max-width:none;padding:40px clamp(24px,4vw,56px)}
+ #view>*{max-width:880px;margin-left:auto;margin-right:auto}}
+@media(max-width:800px){
+ body.shell{padding:0}body.shell #shell{display:block}
+ #top{display:flex;position:sticky;top:0;z-index:6;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:rgba(240,229,208,.92);backdrop-filter:blur(10px);border-bottom:1px solid #e6dccb}
+ #top .logo{font-size:22px;margin:0;font-weight:800}#top .logo span{color:#6a8678}
+ #top button{display:flex;align-items:center;gap:6px;background:none;border:0;color:var(--green);font:700 14px Inter;min-height:44px;padding:0 6px}
+ #nav{background:rgba(5,87,72,.97);backdrop-filter:blur(10px);border-radius:20px 20px 0 0;gap:2px;box-shadow:0 -8px 24px rgba(0,0,0,.15)}
+ #nav button{flex-direction:column;justify-content:center;gap:3px;min-height:58px;font-size:11px;padding:8px 2px}
+ #nav button.cur{box-shadow:none;background:rgba(255,255,255,.18)}#nav .py{display:none}
+ #view{padding:18px 16px calc(100px + env(safe-area-inset-bottom,0px))}
+ #view h1{font-size:24px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:16px}.ring{width:84px;height:84px}}
+@media(max-width:499px){.phone{min-height:100dvh}.screen{padding:20px}.hero{padding-top:calc(28px + env(safe-area-inset-top,0px))}}
 </style>
 </head>
 <body>
@@ -217,7 +249,7 @@ body.shell{background:linear-gradient(160deg,#f7eedc,#e9f2e2) fixed}
 </section>
 
 </main>
-<div id="shell"><nav id="nav" aria-label="Main"></nav><main id="view"></main></div>
+<div id="shell"><header id="top"><div class="logo">Suple<span>Mix</span></div><button onclick="logout()" aria-label="Log out">Log out <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></button></header><nav id="nav" aria-label="Main"></nav><main id="view"></main></div>
 <script>
 const $=id=>document.getElementById(id),P={workout_routine:'Lightly Active',goal:'Lose weight'};
 const ACT=[['Sedentary','Mostly sitting (little movement)'],['Lightly Active','Light exercise 1–3 days per week'],['Moderately Active','3–5 days per week'],['Very Active','6–7 days per week']];
@@ -243,7 +275,7 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const pct=(a,b)=>b?Math.round(a/b*100):0;
 async function openShell(){ME=await api('/me');document.body.classList.add('shell');
  const items=ME.role==='admin'?[['admin','Customers']]:[['dash','Home'],['nut','Nutrition'],['rep','Reports'],['mix','Mixes'],['dev','Device'],['prof','Profile']];
- $('nav').innerHTML='<div class="logo">Suple<span>Mix</span></div>'+items.map(([v,l])=>`<button data-v="${v}" onclick="view('${v}')">${l}</button>`).join('')+'<button class="out" onclick="logout()">Log out</button>';
+ $('nav').innerHTML='<div class="logo">Suple<span>Mix</span></div>'+items.map(([v,l])=>`<button data-v="${v}" onclick="view('${v}')">${IC[v]||''}<span>${l}</span></button>`).join('')+'<small class="py">Powered by Python · FastAPI</small><button class="out" onclick="logout()">'+IC.out+'<span>Log out</span></button>';
  view(items[0][0])}
 async function view(v){document.querySelectorAll('#nav [data-v]').forEach(b=>b.classList.toggle('cur',b.dataset.v===v));const el=$('view');el.innerHTML='<p class="sub">Loading…</p>';try{await VIEWS[v](el)}catch(x){el.innerHTML=`<p class="err">${esc(x.message)}</p>`}}
 const stat=(l,v)=>`<div class="card"><small class="sub">${l}</small><h2>${esc(v)}</h2></div>`;
@@ -277,8 +309,8 @@ async function adminUser(id){const u=await api('/admin/users/'+id),t=u.targets,t
  $('det').scrollIntoView({behavior:'smooth'})}
 async function addMix(e){e.preventDefault();const g=i=>e.target.elements[i];try{await api('/mixes','POST',{mix_name:g('mn').value.trim(),mix_date:g('md').value,mix_time:g('mt').value,whey_protein:+g('w').value,creatine:+g('cr').value,preworkout:+g('pw').value,auto_dispense:g('au').checked});view('mix')}catch(x){e.target.querySelector('.err').textContent=x.message}return false}
 async function delMix(id){await api('/mixes/'+id,'DELETE');view('mix')}
-async function mixNow(id){const m=(await api('/mixes')).find(x=>x.mix_id===id);if(!confirm(`Mix “${m.mix_name}”?\nWhey ${m.whey_protein} g, creatine ${m.creatine} g, pre-workout ${m.preworkout} g`))return;try{await api('/device/dispense','POST',{mix_id:id});alert('Dispensed. Check the Device page for the new levels.')}catch(x){alert(x.message)}}
-async function devAct(p,m,b){try{await api(p,m,b)}catch(x){alert(x.message)}view('dev')}
+async function mixNow(id){const m=(await api('/mixes')).find(x=>x.mix_id===id);if(!confirm(`Mix “${m.mix_name}”?\nWhey ${m.whey_protein} g, creatine ${m.creatine} g, pre-workout ${m.preworkout} g`))return;try{await api('/device/dispense','POST',{mix_id:id});toast('Dispensed. Check the Device page for the new levels.')}catch(x){toast(x.message)}}
+async function devAct(p,m,b){try{await api(p,m,b)}catch(x){toast(x.message)}view('dev')}
 const nowHM=(plus=0)=>{const d=new Date(Date.now()+plus*6e4);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
 VIEWS.dash=async function(el){const day=today(),[d,sg,al]=await Promise.all([api('/logs?day='+day),api('/suggestion?day='+day),api('/alerts?day='+day)]),t=ME.targets||{};
  const r=(n,k,u)=>`<div class="card" style="text-align:center"><div class="ring" style="--p:${Math.min(pct(d.totals[k],t[k]),100)}"><b>${pct(d.totals[k],t[k])}%</b></div><p style="margin:10px 0 0;font-weight:600">${n}</p><small class="sub">${Math.round(d.totals[k])} of ${t[k]}${u}</small></div>`;
@@ -294,9 +326,9 @@ VIEWS.rep=async function(el){const r=await api('/report?days=7&end='+today()),t=
 function foodBlock(day){return `<div class="card"><b>Find a food</b><label class="f" for="fq" style="margin-top:10px">Search</label><input class="in" id="fq" placeholder="Try rice, egg or banana" oninput="findFood(this.value,'${day}')"><div id="fres"></div></div><div class="card"><b>Packaged food barcode</b><p class="sub" style="margin:6px 0 0">Type the number printed under the bars and the grams you ate.</p><div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"><input class="in" id="bc" inputmode="numeric" placeholder="Barcode number" aria-label="Barcode number" style="max-width:240px"><input class="in" id="bg" type="number" min="1" value="100" aria-label="Grams eaten" style="max-width:110px"><button class="btn" style="width:auto;padding:12px 24px;margin:0" onclick="lookupBarcode('${day}')">Look up</button></div><p class="err" id="bce" role="alert"></p></div>`}
 async function findFood(q,day){const r=q.trim()?await api('/foods?q='+encodeURIComponent(q)):[];window.FR=r;$('fres').innerHTML=r.length?r.map((f,i)=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #e6dccb"><span><b>${esc(f.name)}</b><br><small class="sub">${esc(f.serving)}: ${f.calories} kcal, ${f.protein} g protein, ${f.carbs} g carbs, ${f.fat} g fat</small></span><button class="link" onclick="addFood(${i},'${day}')">Add</button></div>`).join(''):(q.trim()?'<p class="sub">No match. Enter it manually below.</p>':'')}
 function addFood(i,day){const f=FR[i];return logMeal(f.name,day,f.calories,f.protein,f.carbs,f.fat)}
-async function logMeal(name,day,c,p,cb,f){try{await api('/logs','POST',{meal_name:name,day,log_time:nowHM(),calories:c,protein:p,carbs:cb,fat:f});VIEWS.nut($('view'),day)}catch(x){alert(x.message)}}
+async function logMeal(name,day,c,p,cb,f){try{await api('/logs','POST',{meal_name:name,day,log_time:nowHM(),calories:c,protein:p,carbs:cb,fat:f});VIEWS.nut($('view'),day)}catch(x){toast(x.message)}}
 async function lookupBarcode(day){const code=$('bc').value.replace(/\D/g,''),g=+$('bg').value||100,e=$('bce');e.textContent='';try{const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=product_name,nutriments'),j=await r.json();if(!j.product)throw 0;const n=j.product.nutriments||{},k=x=>Math.round((n[x+'_100g']||0)*g/10)/10;await logMeal((j.product.product_name||'Packaged food')+' ('+g+' g)',day,Math.round((n['energy-kcal_100g']||0)*g/100),k('proteins'),k('carbohydrates'),k('fat'))}catch{e.textContent='Product not found, or the lookup is unavailable. Use food search or enter it manually.'}}
-async function acceptSuggestion(w,day){try{await api('/mixes','POST',{mix_name:'Suggested whey protein',mix_date:day,mix_time:$('st').value,whey_protein:w,creatine:0,preworkout:0,auto_dispense:false});view('mix')}catch(x){alert(x.message)}}
+async function acceptSuggestion(w,day){try{await api('/mixes','POST',{mix_name:'Suggested whey protein',mix_date:day,mix_time:$('st').value,whey_protein:w,creatine:0,preworkout:0,auto_dispense:false});view('mix')}catch(x){toast(x.message)}}
 async function addLog(e,day){e.preventDefault();const g=i=>e.target.elements[i].value;try{await api('/logs','POST',{meal_name:g('m').trim(),day,log_time:g('tm'),calories:+g('c'),protein:+g('p'),carbs:+g('cb'),fat:+g('fa')});VIEWS.nut($('view'),day)}catch(x){e.target.querySelector('.err').textContent=x.message}return false}
 async function delLog(id,day){await api('/logs/'+id,'DELETE');VIEWS.nut($('view'),day)}
 
@@ -304,6 +336,20 @@ function tp(b){const i=b.parentNode.querySelector('input'),s=i.type==='password'
 function meter(v){let n=0;if(v.length>=8)n++;if(v.length>=12)n++;if(/[a-z]/.test(v)&&/[A-Z]/.test(v))n++;if(/\d/.test(v))n++;if(/[^A-Za-z0-9]/.test(v))n++;
  const L=['Too weak','Weak','Fair','Good','Strong','Excellent'],C=['#c0392b','#c0392b','#e0a800','#7bbf6a','#00c7a5','#00c7a5'];
  pm.style.width=(v?Math.max(n,1)*20:0)+'%';pm.style.background=C[n];pt.textContent=v?L[n]:'Use 8+ characters with a letter and a number.'}
+
+const ic=p=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const IC={dash:ic('<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>'),nut:ic('<path d="M7 3v8a2 2 0 0 0 4 0V3M9 11v10M17 3c-2 2-3 5-3 8h3v10"/>'),rep:ic('<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>'),mix:ic('<path d="M9 3h6M10 3v6L4 20h16L14 9V3"/>'),dev:ic('<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>'),prof:ic('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/>'),admin:ic('<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6M17 4a3.5 3.5 0 0 1 0 7M22 20c0-3-2-5-5-5.7"/>'),out:ic('<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>')};
+function modal(x){closeModal();const e=document.createElement('div');e.id='mo';e.className='mo';e.innerHTML='<div class="dlg" role="dialog" aria-modal="true">'+x+'</div>';e.onclick=v=>{if(v.target===e)closeModal()};document.body.append(e)}
+function closeModal(){const e=document.getElementById('mo');if(e)e.remove()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+function toast(m,bad){const t=document.createElement('div');t.className='toast'+(bad?' bad':'');t.textContent=m;t.setAttribute('role','status');document.body.append(t);setTimeout(()=>t.remove(),3500)}
+async function mixNow(id){const [ms,d]=await Promise.all([api('/mixes'),api('/device')]),m=ms.find(x=>x.mix_id===id);if(!m)return;
+ const need={whey_level:m.whey_protein,creatine_level:m.creatine,preworkout_level:m.preworkout},low=Object.entries(need).some(([k,g])=>g>0&&d[k]<10),ok=d.online&&!low;
+ const chk=[['Device connected',d.online],['Stock levels sufficient',!low],['Ready to mix',ok]];
+ modal(`<h2>Confirm mix</h2><p class="sub">You’re about to mix “${esc(m.mix_name)}”:</p><table class="tbl"><tr><td>Whey protein</td><td>${m.whey_protein} g</td></tr><tr><td>Creatine</td><td>${m.creatine} g</td></tr><tr><td>Pre-workout</td><td>${m.preworkout} g</td></tr></table><p style="margin:14px 0 4px"><b>Device status</b></p>${chk.map(([t,v])=>`<p class="chk ${v?'y':'n'}">${v?'✓':'✕'} ${t}</p>`).join('')}<div class="row"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn${ok?'':' off'}" onclick="doMix(${id})">Confirm</button></div>`)}
+async function doMix(id){closeModal();try{await api('/device/dispense','POST',{mix_id:id});toast('Dispensed. Levels updated.')}catch(x){toast(x.message,1)}}
+const _dash=VIEWS.dash;VIEWS.dash=async function(el){await _dash(el);try{const [ms,dv]=await Promise.all([api('/mixes'),api('/device')]),now=today()+' '+nowHM(),n=ms.find(m=>m.mix_date+' '+m.mix_time>=now);
+ el.insertAdjacentHTML('beforeend',`<div class="card" style="background:var(--green);color:#fff;border:0"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b>Your next mix</b><span class="pill${dv.online?'':' bad'}">${dv.online?'Device connected':'Device offline'}</span></div>${n?`<h2 style="margin:10px 0 2px">${esc(n.mix_name)}</h2><p style="margin:0 0 14px;opacity:.85">${n.mix_date} at ${n.mix_time}${n.auto_dispense?' · auto-dispense on':''}</p><button class="btn" style="width:auto;padding:12px 24px;margin:0;background:var(--cream);color:var(--ink)" onclick="mixNow(${n.mix_id})">Mix now</button>`:'<p style="opacity:.85;margin:10px 0 14px">No upcoming mix. Create one to get started.</p><button class="btn" style="width:auto;padding:12px 24px;margin:0;background:var(--cream);color:var(--ink)" onclick="view(\'mix\')">Create a mix</button>'}</div>`)}catch{}};
 </script>
 </body>
 </html>
