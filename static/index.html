@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="theme-color" content="#055748">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SupleMix</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
@@ -77,6 +79,63 @@ body{display:block;background:var(--cream)}
 #o1 .btn,#o2 .btn,#o3 .btn,#o4 .btn{margin-top:28px}
 #o1 form{flex:none}
 }
+
+/* ===== SupleMix v2: polish, motion, security UI ===== */
+@property --p{syntax:'<number>';inherits:false;initial-value:0}
+:root{--ease:cubic-bezier(.2,.8,.2,1);--shadow:0 12px 32px rgba(5,87,72,.13)}
+body{background:radial-gradient(1100px 600px at 8% -10%,#f9f1e1,transparent),radial-gradient(900px 500px at 110% 110%,#d6eed9,transparent),#eee5d1}
+body.shell{background:linear-gradient(160deg,#f7eedc,#e9f2e2) fixed}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(24px,-26px) scale(1.15)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes fill{from{--p:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.screen.on{animation:pop .45s var(--ease)}
+.screen.on>*,.panel>*,#view>*{animation:up .55s var(--ease) both}
+.panel>:nth-child(2),#view>:nth-child(2){animation-delay:.05s}.panel>:nth-child(3),#view>:nth-child(3){animation-delay:.1s}
+.panel>:nth-child(4),#view>:nth-child(4){animation-delay:.15s}.panel>:nth-child(5),#view>:nth-child(5){animation-delay:.2s}
+.panel>:nth-child(n+6),#view>:nth-child(n+6){animation-delay:.25s}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#f6ecd8,#e4efd8)}
+.hero>*{position:relative;z-index:1}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(40px);opacity:.55;animation:float 9s ease-in-out infinite}
+.hero::before{width:220px;height:220px;background:#00c7a5;top:-60px;left:-50px}
+.hero::after{width:260px;height:260px;background:#9fd3a0;bottom:-90px;right:-60px;animation-delay:-4s}
+.mark{width:64px;height:64px;filter:drop-shadow(0 8px 12px rgba(5,87,72,.25));animation:float 6s ease-in-out infinite}
+#login,#register{background:linear-gradient(165deg,#066350,#032f27)}
+.btn{box-shadow:0 8px 18px rgba(5,87,72,.28);transition:transform .2s var(--ease),box-shadow .2s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.07);box-shadow:0 12px 24px rgba(5,87,72,.34)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{cursor:wait;opacity:.75}
+.btn:disabled::after{content:"";display:inline-block;width:14px;height:14px;margin-left:10px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}
+.in{transition:border-color .2s,box-shadow .2s,transform .2s}
+.in:hover{border-color:#cdbfa5}
+.in:focus{outline:0;border-color:var(--teal);box-shadow:0 0 0 4px rgba(0,199,165,.2)}
+.in:user-invalid{border-color:var(--err)}
+.pw{position:relative}.pw .in{padding-right:50px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;display:grid;place-items:center;background:none;border:0;border-radius:10px;color:#6E8179;cursor:pointer;transition:color .2s,background .2s}
+.eye:hover{color:var(--green);background:rgba(5,87,72,.08)}
+.eye .off,.eye[aria-pressed=true] .on{display:none}.eye[aria-pressed=true] .off{display:block}
+.meter{height:6px;border-radius:6px;background:rgba(255,255,255,.2);margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;border-radius:6px;transition:width .35s var(--ease),background .35s}
+.hint{display:block;margin-top:6px;font-size:12px;opacity:.8}
+.err:not(:empty){animation:shake .35s}
+.card,.tgt,.opt,.seg{transition:transform .25s var(--ease),box-shadow .25s,border-color .25s,background .25s}
+.card{box-shadow:0 2px 8px rgba(5,87,72,.05)}
+.card:hover,.opt:hover,.tgt:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.opt:has(input:checked){box-shadow:0 0 0 2px var(--green) inset}
+.ring{animation:fill 1.2s var(--ease)}
+.bar i{transform-origin:left;animation:grow .9s var(--ease)}
+.prog i{transition:background .4s}
+.prog i.d{animation:grow .6s var(--ease)}
+#nav{background:linear-gradient(180deg,#066350,#043d32)}
+#nav button{transition:background .2s,transform .2s}
+#nav button:hover{background:rgba(255,255,255,.1);transform:translateX(3px)}
+#nav button.cur{box-shadow:inset 3px 0 0 var(--teal)}
+.tbl tbody tr{transition:background .2s}.tbl tbody tr:hover{background:rgba(5,87,72,.05)}
+.link{transition:opacity .2s}.link:hover{opacity:.7}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -84,10 +143,10 @@ body{display:block;background:var(--cream)}
 
 <!-- LOGIN -->
 <section class="screen on" id="login">
-  <div class="hero"><div class="logo">Suple<span>Mix</span></div><b>Nutrition, mixed your way.</b><small>Track your intake. Personalize your blend. Stay on schedule.</small></div>
+  <div class="hero"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 34c-9 0-15-6-15-16 10 0 15 5 15 16z" fill="#0b6b59"/><path d="M32 34c0-12 6-19 17-20 0 12-6 20-17 20z" fill="#00a98d"/><path d="M12 38h40c0 10-9 18-20 18S12 48 12 38z" fill="#0F3D33"/></svg><div class="logo">Suple<span>Mix</span></div><b>Nutrition, mixed your way.</b><small>Track your intake. Personalize your blend. Stay on schedule.</small></div>
   <form class="panel" onsubmit="return go(event,doLogin)">
     <label class="f" for="li">Username or email</label><input class="in" id="li" autocomplete="username" required>
-    <label class="f" for="lp">Password</label><input class="in" id="lp" type="password" autocomplete="current-password" required>
+    <label class="f" for="lp">Password</label><div class="pw"><input class="in" id="lp" type="password" autocomplete="current-password" maxlength="72" required><button type="button" class="eye" onclick="tp(this)" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="on"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></g><g class="off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></g></svg></button></div>
     <p class="err" id="lerr" role="alert"></p>
     <button class="btn">Log in</button>
     <p style="text-align:center;font-size:14px">New to SupleMix? <button type="button" class="link" onclick="show('register')">Create account</button></p>
@@ -96,11 +155,12 @@ body{display:block;background:var(--cream)}
 
 <!-- REGISTER -->
 <section class="screen" id="register">
-  <div class="hero"><div class="logo">Suple<span>Mix</span></div><b>Create your account</b><small>It takes about a minute.</small></div>
+  <div class="hero"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 34c-9 0-15-6-15-16 10 0 15 5 15 16z" fill="#0b6b59"/><path d="M32 34c0-12 6-19 17-20 0 12-6 20-17 20z" fill="#00a98d"/><path d="M12 38h40c0 10-9 18-20 18S12 48 12 38z" fill="#0F3D33"/></svg><div class="logo">Suple<span>Mix</span></div><b>Create your account</b><small>It takes about a minute.</small></div>
   <form class="panel" onsubmit="return go(event,doRegister)">
     <label class="f" for="ru">Username</label><input class="in" id="ru" autocomplete="username" minlength="3" maxlength="50" pattern="[A-Za-z0-9_.]+" title="Letters, numbers, dots and underscores" required>
     <label class="f" for="re">Email</label><input class="in" id="re" type="email" autocomplete="email" required>
-    <label class="f" for="rp">Password (8 characters or more)</label><input class="in" id="rp" type="password" minlength="8" maxlength="72" autocomplete="new-password" required>
+    <label class="f" for="rp">Password (8 characters or more)</label><div class="pw"><input class="in" id="rp" type="password" minlength="8" maxlength="72" pattern="(?=.*[A-Za-z])(?=.*\d).{8,72}" title="At least 8 characters with a letter and a number" autocomplete="new-password" oninput="meter(this.value)" required><button type="button" class="eye" onclick="tp(this)" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="on"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></g><g class="off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></g></svg></button></div><div class="meter" aria-hidden="true"><i id="pm"></i></div><small id="pt" class="hint">Use 8+ characters with a letter and a number.</small>
+    <label class="f" for="rp2">Confirm password</label><div class="pw"><input class="in" id="rp2" type="password" maxlength="72" autocomplete="new-password" required><button type="button" class="eye" onclick="tp(this)" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="on"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></g><g class="off"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></g></svg></button></div>
     <p class="err" id="rerr" role="alert"></p>
     <button class="btn">Create account</button>
     <p style="text-align:center;font-size:14px">Already have an account? <button type="button" class="link" onclick="show('login')">Log in</button></p>
@@ -172,7 +232,7 @@ async function api(path,method='GET',body){
   return d;}
 async function go(e,fn){e.preventDefault();const b=e.target.querySelector('.btn');b.disabled=true;try{await fn()}catch(x){const m=e.target.querySelector('.err');if(m)m.textContent=x.message}b.disabled=false;return false}
 async function doLogin(){const d=await api('/auth/login','POST',{identifier:li.value.trim(),password:lp.value});localStorage.tok=d.token;await enter()}
-async function doRegister(){const d=await api('/auth/register','POST',{username:ru.value.trim(),email:re.value.trim(),password:rp.value});localStorage.tok=d.token;show('o1')}
+async function doRegister(){if(rp.value!==rp2.value)throw new Error('Passwords do not match.');const d=await api('/auth/register','POST',{username:ru.value.trim(),email:re.value.trim(),password:rp.value});localStorage.tok=d.token;show('o1')}
 const tiles=t=>[['Calories',t.calories,' kcal'],['Protein',t.protein,' g'],['Carbs',t.carbs,' g'],['Fat',t.fat,' g']].map(([n,v,u])=>`<div class="tgt"><span>${n}</span><b>${Number(v).toLocaleString()}${u}</b></div>`).join('');
 async function finish(b){b.disabled=true;$('o3err').textContent='';try{const t=await api('/me/onboarding','PUT',P);$('tg').innerHTML=tiles(t);show('o4')}catch(x){$('o3err').textContent=x.message}b.disabled=false}
 async function enter(){try{const m=await api('/me');show(m.onboarded||m.role==='admin'?'home':'o1')}catch{logout()}}
@@ -239,6 +299,11 @@ async function lookupBarcode(day){const code=$('bc').value.replace(/\D/g,''),g=+
 async function acceptSuggestion(w,day){try{await api('/mixes','POST',{mix_name:'Suggested whey protein',mix_date:day,mix_time:$('st').value,whey_protein:w,creatine:0,preworkout:0,auto_dispense:false});view('mix')}catch(x){alert(x.message)}}
 async function addLog(e,day){e.preventDefault();const g=i=>e.target.elements[i].value;try{await api('/logs','POST',{meal_name:g('m').trim(),day,log_time:g('tm'),calories:+g('c'),protein:+g('p'),carbs:+g('cb'),fat:+g('fa')});VIEWS.nut($('view'),day)}catch(x){e.target.querySelector('.err').textContent=x.message}return false}
 async function delLog(id,day){await api('/logs/'+id,'DELETE');VIEWS.nut($('view'),day)}
+
+function tp(b){const i=b.parentNode.querySelector('input'),s=i.type==='password';i.type=s?'text':'password';b.setAttribute('aria-pressed',s);b.setAttribute('aria-label',s?'Hide password':'Show password')}
+function meter(v){let n=0;if(v.length>=8)n++;if(v.length>=12)n++;if(/[a-z]/.test(v)&&/[A-Z]/.test(v))n++;if(/\d/.test(v))n++;if(/[^A-Za-z0-9]/.test(v))n++;
+ const L=['Too weak','Weak','Fair','Good','Strong','Excellent'],C=['#c0392b','#c0392b','#e0a800','#7bbf6a','#00c7a5','#00c7a5'];
+ pm.style.width=(v?Math.max(n,1)*20:0)+'%';pm.style.background=C[n];pt.textContent=v?L[n]:'Use 8+ characters with a letter and a number.'}
 </script>
 </body>
 </html>
