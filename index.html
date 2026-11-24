@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SupleMix</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--cream:#F0E5D0;--card:#FFF9F3;--green:#055748;--ink:#0F3D33;--mute:#6E8179;--mint:#D2EBD3;--teal:#00C7A5;--err:#C0392B}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#e9e4d9;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
+.phone{width:min(100%,400px);min-height:min(100vh,780px);background:var(--cream);position:relative;overflow:hidden;display:flex;flex-direction:column}
+@media(min-width:500px){.phone{border-radius:28px;box-shadow:0 20px 50px rgba(5,87,72,.18);margin:16px}}
+.screen{display:none;flex:1;flex-direction:column;padding:24px}
+.screen.on{display:flex}
+h1{font-size:26px;margin:8px 0 6px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--mute);font-size:14px;font-weight:500;margin:0 0 20px}
+label.f{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+.in{width:100%;padding:14px 16px;border:1px solid #e6dccb;background:var(--card);border-radius:14px;font:inherit;color:var(--ink)}
+.in:focus,button:focus-visible,.opt:focus-within{outline:3px solid var(--teal);outline-offset:2px}
+.btn{width:100%;margin-top:auto;padding:16px;border:0;border-radius:999px;background:var(--green);color:#fff;font:700 16px Inter;cursor:pointer}
+.btn:disabled{opacity:.6}
+.link{background:none;border:0;color:var(--green);font:600 14px Inter;text-decoration:underline;cursor:pointer;padding:0}
+.err{color:var(--err);font-size:13px;font-weight:600;min-height:18px;margin:10px 0 0}
+/* login: cream hero over green panel */
+#login,#register{padding:0;background:var(--green);color:#fff}
+.hero{background:var(--cream);color:var(--ink);text-align:center;padding:36px 24px 70px;border-radius:0 0 50% 50%/0 0 36px 36px}
+.logo{font-size:38px;font-weight:800;letter-spacing:-.03em;margin:6px 0}.logo span{color:#6a8678}
+.hero b{display:block;font-size:20px;margin-top:10px}.hero small{display:block;color:var(--mute);font-weight:500;margin-top:6px}
+.panel{padding:8px 28px 28px;flex:1;display:flex;flex-direction:column}
+.panel .btn{background:var(--cream);color:var(--ink);margin-top:20px}
+.panel .link{color:var(--teal)}
+.panel .err{color:#ffb4a8}
+.row{display:flex;gap:12px}.row>*{flex:1}
+.seg{display:flex;align-items:center;gap:8px;padding:14px;border:1px solid #e6dccb;background:var(--card);border-radius:14px;font-weight:600;cursor:pointer}
+.opt{display:flex;align-items:center;gap:12px;padding:16px;margin-bottom:12px;border:1px solid #e6dccb;background:var(--card);border-radius:16px;cursor:pointer}
+.opt:has(input:checked){background:var(--mint);border-color:var(--green)}
+.opt input,.seg input{accent-color:var(--green);width:18px;height:18px;margin:0}
+.opt b{display:block;font-size:15px}.opt small{color:var(--mute);font-weight:500;font-size:12px}
+.opt span:first-child{flex:1}
+.prog{display:flex;gap:6px;margin-bottom:18px}.prog i{flex:1;height:4px;border-radius:4px;background:#c9c1b0}.prog i.d{background:var(--green)}
+.back{background:none;border:0;font-size:22px;color:var(--green);cursor:pointer;align-self:flex-start;padding:0 0 8px}
+.tgt{display:flex;justify-content:space-between;align-items:baseline;padding:18px;background:var(--card);border:1px solid #e6dccb;border-radius:16px;margin-bottom:12px}
+.tgt b{font-size:22px}.tgt span{font-weight:600;color:var(--green)}
+
+body.shell{display:block;background:var(--cream)}body.shell .phone{display:none}
+#shell{display:none}
+body.shell #shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+#nav{background:var(--green);color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+#nav .logo{font-size:24px;color:#fff;margin:0 8px 18px}#nav .logo span{color:#9fd3c0}
+#nav button{background:none;border:0;color:#d7efe6;font:600 15px Inter;text-align:left;padding:12px 14px;border-radius:12px;cursor:pointer}
+#nav button.cur{background:rgba(255,255,255,.16);color:#fff}#nav .out{margin-top:auto}
+#view{padding:32px;max-width:980px;width:100%}
+.card{background:var(--card);border:1px solid #e6dccb;border-radius:16px;padding:18px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.ring{width:96px;height:96px;margin:0 auto;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),#e0d6c0 0);display:grid;place-items:center;position:relative}
+.ring::before{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--card)}.ring b{position:relative}
+.bar{height:8px;border-radius:8px;background:#e8dfcc}.bar i{display:block;height:100%;background:var(--green);border-radius:8px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}.tbl th,.tbl td{text-align:left;padding:10px;border-bottom:1px solid #e6dccb}
+#view h1{margin-top:0}#view h2{margin:6px 0 0}
+@media(max-width:800px){body.shell #shell{grid-template-columns:1fr}
+#nav{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+#nav .logo{display:none}#nav button{flex:1;text-align:center;padding:12px 2px;font-size:12px}#nav .out{display:none}
+#view{padding:20px 18px 96px}}
+
+/* Desktop: login, register and setup use the full screen instead of a phone frame */
+@media(min-width:860px){
+body{display:block;background:var(--cream)}
+.phone{width:100%;max-width:none;min-height:100vh;margin:0;border-radius:0;box-shadow:none}
+#login.on,#register.on{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+#login .hero,#register .hero{display:flex;flex-direction:column;justify-content:center;align-items:center;border-radius:0;padding:64px 48px}
+#login .logo,#register .logo{font-size:56px}
+#login .hero b,#register .hero b{font-size:28px;margin-top:18px}
+#login .hero small,#register .hero small{font-size:16px;max-width:380px}
+#login .panel,#register .panel{justify-content:center;width:100%;max-width:520px;margin:0 auto;padding:48px}
+#o1,#o2,#o3,#o4{width:100%;max-width:580px;margin:0 auto;padding:56px 24px;justify-content:center}
+#o1 .btn,#o2 .btn,#o3 .btn,#o4 .btn{margin-top:28px}
+#o1 form{flex:none}
+}
+</style>
+</head>
+<body>
+<main class="phone">
+
+<!-- LOGIN -->
+<section class="screen on" id="login">
+  <div class="hero"><div class="logo">Suple<span>Mix</span></div><b>Nutrition, mixed your way.</b><small>Track your intake. Personalize your blend. Stay on schedule.</small></div>
+  <form class="panel" onsubmit="return go(event,doLogin)">
+    <label class="f" for="li">Username or email</label><input class="in" id="li" autocomplete="username" required>
+    <label class="f" for="lp">Password</label><input class="in" id="lp" type="password" autocomplete="current-password" required>
+    <p class="err" id="lerr" role="alert"></p>
+    <button class="btn">Log in</button>
+    <p style="text-align:center;font-size:14px">New to SupleMix? <button type="button" class="link" onclick="show('register')">Create account</button></p>
+  </form>
+</section>
+
+<!-- REGISTER -->
+<section class="screen" id="register">
+  <div class="hero"><div class="logo">Suple<span>Mix</span></div><b>Create your account</b><small>It takes about a minute.</small></div>
+  <form class="panel" onsubmit="return go(event,doRegister)">
+    <label class="f" for="ru">Username</label><input class="in" id="ru" autocomplete="username" minlength="3" maxlength="50" pattern="[A-Za-z0-9_.]+" title="Letters, numbers, dots and underscores" required>
+    <label class="f" for="re">Email</label><input class="in" id="re" type="email" autocomplete="email" required>
+    <label class="f" for="rp">Password (8 characters or more)</label><input class="in" id="rp" type="password" minlength="8" maxlength="72" autocomplete="new-password" required>
+    <p class="err" id="rerr" role="alert"></p>
+    <button class="btn">Create account</button>
+    <p style="text-align:center;font-size:14px">Already have an account? <button type="button" class="link" onclick="show('login')">Log in</button></p>
+  </form>
+</section>
+
+<!-- ONBOARDING 1 -->
+<section class="screen" id="o1">
+  <div class="prog"><i class="d"></i><i></i><i></i><i></i></div>
+  <h1>Tell us about yourself</h1><p class="sub">This helps us calculate your daily nutrient goals.</p>
+  <form style="display:flex;flex-direction:column;flex:1" onsubmit="return go(event,()=>{P.gender=document.querySelector('[name=g]:checked').value;P.weight=+w.value;P.height=+h.value;P.birth_date=dob.value;show('o2')})">
+    <label class="f">Gender</label>
+    <div class="row"><label class="seg"><input type="radio" name="g" value="Male" checked> Male</label><label class="seg"><input type="radio" name="g" value="Female"> Female</label></div>
+    <label class="f" for="w">Weight (kg)</label><input class="in" id="w" type="number" step="0.1" min="30" max="350" value="58" required>
+    <label class="f" for="h">Height (cm)</label><input class="in" id="h" type="number" step="0.1" min="100" max="250" value="170" required>
+    <label class="f" for="dob">Date of birth</label><input class="in" id="dob" type="date" required>
+    <p class="err" id="o1err" role="alert"></p>
+    <button class="btn">Next</button>
+  </form>
+</section>
+
+<!-- ONBOARDING 2 -->
+<section class="screen" id="o2">
+  <button class="back" onclick="show('o1')" aria-label="Back">←</button>
+  <div class="prog"><i class="d"></i><i class="d"></i><i></i><i></i></div>
+  <h1>How often do you workout?</h1><p class="sub">This helps us set your calorie and protein needs.</p>
+  <div id="acts"></div>
+  <button class="btn" onclick="show('o3')">Next</button>
+</section>
+
+<!-- ONBOARDING 3 -->
+<section class="screen" id="o3">
+  <button class="back" onclick="show('o2')" aria-label="Back">←</button>
+  <div class="prog"><i class="d"></i><i class="d"></i><i class="d"></i><i></i></div>
+  <h1>What’s your goal?</h1><p class="sub">Pick the one that fits best.</p>
+  <div id="goals"></div>
+  <p class="err" id="o3err" role="alert"></p>
+  <button class="btn" onclick="finish(this)">Next</button>
+</section>
+
+<!-- ONBOARDING 4 -->
+<section class="screen" id="o4">
+  <div class="prog"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></div>
+  <h1>You’re all set!</h1><p class="sub">Based on your profile, here are your daily nutrition targets.</p>
+  <div id="tg"></div>
+  <button class="btn" onclick="show('home')">Next</button>
+</section>
+
+<!-- HOME placeholder (dashboard comes next) -->
+<section class="screen" id="home">
+  <h1 id="hi">Welcome</h1><p class="sub">Your account is ready. The dashboard is the next module.</p>
+  <div id="tg2"></div>
+  <button class="btn" onclick="logout()">Log out</button>
+</section>
+
+</main>
+<div id="shell"><nav id="nav" aria-label="Main"></nav><main id="view"></main></div>
+<script>
+const $=id=>document.getElementById(id),P={workout_routine:'Lightly Active',goal:'Lose weight'};
+const ACT=[['Sedentary','Mostly sitting (little movement)'],['Lightly Active','Light exercise 1–3 days per week'],['Moderately Active','3–5 days per week'],['Very Active','6–7 days per week']];
+const GOALS=[['Lose weight','Reduce body fat with steady deficit'],['Lose weight + build muscle','Lose fat while building muscle'],['Maintain fitness','Maintain weight + dial in macros'],['Gain weight','Add weight with a steady surplus'],['Gain weight + build muscle','Add size lean (a controlled surplus)']];
+const opts=(el,list,key)=>$(el).innerHTML=list.map(([v,d])=>`<label class="opt"><span><b>${v}</b><small>${d}</small></span><input type="radio" name="${key}" value="${v}" ${P[key]===v?'checked':''} onchange="P['${key}']=this.value"></label>`).join('');
+opts('acts',ACT,'workout_routine');opts('goals',GOALS,'goal');
+const show=id=>{if(id==='home'){openShell();return}document.body.classList.remove('shell');document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))};
+async function api(path,method='GET',body){
+  const r=await fetch('/api'+path,{method,headers:{'Content-Type':'application/json',...(localStorage.tok&&{Authorization:'Bearer '+localStorage.tok})},body:body&&JSON.stringify(body)});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(typeof d.detail==='string'?d.detail:'Check your entries and try again.');
+  return d;}
+async function go(e,fn){e.preventDefault();const b=e.target.querySelector('.btn');b.disabled=true;try{await fn()}catch(x){const m=e.target.querySelector('.err');if(m)m.textContent=x.message}b.disabled=false;return false}
+async function doLogin(){const d=await api('/auth/login','POST',{identifier:li.value.trim(),password:lp.value});localStorage.tok=d.token;await enter()}
+async function doRegister(){const d=await api('/auth/register','POST',{username:ru.value.trim(),email:re.value.trim(),password:rp.value});localStorage.tok=d.token;show('o1')}
+const tiles=t=>[['Calories',t.calories,' kcal'],['Protein',t.protein,' g'],['Carbs',t.carbs,' g'],['Fat',t.fat,' g']].map(([n,v,u])=>`<div class="tgt"><span>${n}</span><b>${Number(v).toLocaleString()}${u}</b></div>`).join('');
+async function finish(b){b.disabled=true;$('o3err').textContent='';try{const t=await api('/me/onboarding','PUT',P);$('tg').innerHTML=tiles(t);show('o4')}catch(x){$('o3err').textContent=x.message}b.disabled=false}
+async function enter(){try{const m=await api('/me');show(m.onboarded||m.role==='admin'?'home':'o1')}catch{logout()}}
+function logout(){delete localStorage.tok;show('login')}
+if(localStorage.tok)enter();
+let ME=null;const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+async function openShell(){ME=await api('/me');document.body.classList.add('shell');
+ const items=ME.role==='admin'?[['admin','Customers']]:[['dash','Home'],['nut','Nutrition'],['rep','Reports'],['mix','Mixes'],['dev','Device'],['prof','Profile']];
+ $('nav').innerHTML='<div class="logo">Suple<span>Mix</span></div>'+items.map(([v,l])=>`<button data-v="${v}" onclick="view('${v}')">${l}</button>`).join('')+'<button class="out" onclick="logout()">Log out</button>';
+ view(items[0][0])}
+async function view(v){document.querySelectorAll('#nav [data-v]').forEach(b=>b.classList.toggle('cur',b.dataset.v===v));const el=$('view');el.innerHTML='<p class="sub">Loading…</p>';try{await VIEWS[v](el)}catch(x){el.innerHTML=`<p class="err">${esc(x.message)}</p>`}}
+const stat=(l,v)=>`<div class="card"><small class="sub">${l}</small><h2>${esc(v)}</h2></div>`;
+const VIEWS={
+async dash(el){const d=await api('/logs?day='+today()),t=ME.targets||{};
+ const r=(n,k,u)=>`<div class="card" style="text-align:center"><div class="ring" style="--p:${Math.min(pct(d.totals[k],t[k]),100)}"><b>${pct(d.totals[k],t[k])}%</b></div><p style="margin:10px 0 0;font-weight:600">${n}</p><small class="sub">${Math.round(d.totals[k])} of ${t[k]}${u}</small></div>`;
+ el.innerHTML=`<h1>Good day, ${esc(ME.username)}</h1><p class="sub">Today’s nutrition</p><div class="grid">${r('Calories','calories',' kcal')}${r('Protein','protein',' g')}${r('Carbs','carbs',' g')}${r('Fat','fat',' g')}</div><div class="card"><b>Log your meals</b><p class="sub" style="margin:6px 0 12px">Add what you ate to see how close you are to your targets.</p><button class="btn" style="width:auto;padding:12px 24px;margin:0" onclick="view('nut')">Add a meal</button></div>`},
+async nut(el,day=today()){const d=await api('/logs?day='+day),t=ME.targets||{};
+ const bar=(n,k,u)=>`<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;font-weight:600;font-size:14px"><span>${n}</span><span>${Math.round(d.totals[k])}/${t[k]}${u}</span></div><div class="bar"><i style="width:${Math.min(pct(d.totals[k],t[k]),100)}%"></i></div></div>`;
+ const f=(id,l,x='')=>`<div><label class="f" for="${id}">${l}</label><input class="in" id="${id}" name="${id}" ${x} required></div>`;
+ const n='type="number" min="0" step="0.1"';
+ el.innerHTML=`<h1>Nutrition log</h1><label class="f" for="nd" style="margin-top:0">Date</label><input class="in" type="date" id="nd" value="${day}" style="max-width:220px" onchange="VIEWS.nut($('view'),this.value||today())">
+ <div class="card" style="margin-top:16px"><b>Meals</b>${d.items.length?d.items.map(i=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #e6dccb"><span><b>${esc(i.meal_name)}</b><br><small class="sub">${i.log_time}, ${i.calories} kcal, ${i.protein} g protein, ${i.carbs} g carbs, ${i.fat} g fat</small></span><button class="link" onclick="delLog(${i.id},'${day}')">Delete</button></div>`).join(''):'<p class="sub">No meals logged for this day. Add one below.</p>'}</div>
+ <div class="card"><b>Daily targets</b>${bar('Calories','calories',' kcal')}${bar('Protein','protein',' g')}${bar('Carbs','carbs',' g')}${bar('Fat','fat',' g')}</div>
+ ${foodBlock(day)}<form class="card" onsubmit="return addLog(event,'${day}')"><b>Add a meal</b><div class="grid">${f('m','Meal name','maxlength="200"')}${f('tm','Time','type="time" value="12:00"')}${f('c','Calories (kcal)',n)}${f('p','Protein (g)',n)}${f('cb','Carbs (g)',n)}${f('fa','Fat (g)',n)}</div><p class="err" role="alert"></p><button class="btn" style="width:auto;padding:12px 24px;margin:8px 0 0">Save meal</button></form>`},
+async mix(el){const ms=await api('/mixes');
+ const n=(id,l,max,v=0)=>`<div><label class="f" for="${id}">${l} (max ${max} g)</label><input class="in" id="${id}" name="${id}" type="number" min="0" max="${max}" step="0.1" value="${v}" required></div>`;
+ el.innerHTML=`<h1>Mixes</h1><div class="card"><b>Scheduled mixes</b>${ms.length?ms.map(m=>`<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #e6dccb"><span><b>${esc(m.mix_name)}</b><br><small class="sub">${m.mix_date} at ${m.mix_time}: whey ${m.whey_protein} g, creatine ${m.creatine} g, pre-workout ${m.preworkout} g${m.auto_dispense?', auto-dispense on':''}</small></span><span><button class="link" onclick="mixNow(${m.mix_id})">Mix now</button> <button class="link" onclick="delMix(${m.mix_id})">Delete</button></span></div>`).join(''):'<p class="sub">No mixes yet. Create one below.</p>'}</div>
+ <form class="card" onsubmit="return addMix(event)"><b>Create a mix</b><div class="grid"><div><label class="f" for="mn">Mix name</label><input class="in" id="mn" name="mn" maxlength="200" required></div><div><label class="f" for="md">Date</label><input class="in" id="md" name="md" type="date" value="${today()}" required></div><div><label class="f" for="mt">Time</label><input class="in" id="mt" name="mt" type="time" value="07:00" required></div>${n('w','Whey protein',60,30)}${n('cr','Creatine',10,5)}${n('pw','Pre-workout',10,5)}</div><label style="display:flex;gap:8px;align-items:center;margin:14px 0;font-weight:600"><input type="checkbox" name="au" checked style="accent-color:var(--green);width:18px;height:18px"> Dispense automatically at the scheduled time</label><p class="err" role="alert"></p><button class="btn" style="width:auto;padding:12px 24px;margin:0">Save mix</button></form>`},
+async dev(el){const [d,l]=await Promise.all([api('/device'),api('/device/logs')]);
+ const lv=(n,v)=>`<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;font-weight:600;font-size:14px"><span>${n}</span><span>${v}%${v<10?', too low to dispense':''}</span></div><div class="bar"><i style="width:${v}%;${v<20?'background:#E0A800':''}"></i></div></div>`;
+ const b2='background:#fff;color:var(--green);border:1px solid var(--green)';
+ el.innerHTML=`<h1>My SupleMix device</h1><p class="sub">${d.online?'Connected':'Offline'}. This is a simulated dispenser until the real hardware is connected.</p><div class="card"><b>Ingredient levels</b>${lv('Whey protein',d.whey_level)}${lv('Creatine',d.creatine_level)}${lv('Pre-workout',d.preworkout_level)}<button class="btn" style="width:auto;padding:12px 24px;margin:8px 12px 0 0" onclick="devAct('/device/refill','POST')">Refill all</button><button class="btn" style="width:auto;padding:12px 24px;margin:8px 0 0;${b2}" onclick="devAct('/device/online','PUT',{online:${!d.online}})">${d.online?'Simulate offline':'Reconnect'}</button></div><div class="card"><b>Recent dispensing</b>${l.length?l.map(x=>`<p style="margin:8px 0"><small class="sub">${x.created_at.slice(0,16).replace('T',' ')} UTC</small><br>${esc(x.mix_name)}: ${x.status}${x.status==='failed'?', '+esc(x.message):''}</p>`).join(''):'<p class="sub">Nothing dispensed yet.</p>'}</div>`},
+async prof(el){const m=ME,bmi=m.weight/((m.height/100)**2);
+ el.innerHTML=`<h1>${esc(m.username)}</h1><p class="sub">${esc(m.email)}</p><div class="grid">${stat('Weight',m.weight+' kg')}${stat('Height',m.height+' cm')}${stat('BMI',bmi.toFixed(1))}</div><div class="card"><b>Your plan</b><p class="sub">${esc(m.goal)}, ${esc(m.workout_routine)}</p>${tiles(m.targets)}<button class="btn" style="width:auto;padding:12px 24px;margin:0" onclick="show('o1')">Update my details</button> <button class="link" style="margin-left:16px" onclick="logout()">Log out</button></div>`},
+async admin(el){const us=await api('/admin/users');
+ window.drawUsers=q=>us.filter(u=>(u.username+u.email).toLowerCase().includes(q.toLowerCase())).map(u=>`<tr><td><button class="link" onclick="adminUser(${u.user_id})">${esc(u.username)}</button></td><td>${esc(u.email)}</td><td>${u.role}</td><td>${u.onboarded?'Set up':'Not set up'}</td></tr>`).join('')||'<tr><td colspan="4">No matching users.</td></tr>';
+ el.innerHTML=`<h1>Customers</h1><p class="sub">${us.length} accounts. Select a username to view details. <button class="link" onclick="logout()">Log out</button></p><label class="f" for="q" style="margin-top:0">Search</label><input class="in" id="q" placeholder="Username or email" style="max-width:320px;margin-bottom:14px" oninput="$('tb').innerHTML=drawUsers(this.value)"><div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr><th>Username</th><th>Email</th><th>Role</th><th>Setup</th></tr></thead><tbody id="tb">${drawUsers('')}</tbody></table></div><div id="det"></div>`}};
+async function adminUser(id){const u=await api('/admin/users/'+id),t=u.targets,tt=u.today.totals;
+ $('det').innerHTML=`<div class="card"><h2>${esc(u.username)}</h2><p class="sub">${esc(u.email)}</p>${u.onboarded?`<p>${esc(u.gender)}, ${u.weight} kg, ${u.height} cm, born ${u.birth_date}<br>${esc(u.goal)}, ${esc(u.workout_routine)}</p><b>Targets</b>${tiles(t)}<b>Eaten today</b><p>${Math.round(tt.calories)} of ${t.calories} kcal, ${Math.round(tt.protein)} g protein, ${u.today.items.length} meals logged</p>`:'<p class="sub">This customer has not finished setup yet.</p>'}</div>`;
+ $('det').scrollIntoView({behavior:'smooth'})}
+async function addMix(e){e.preventDefault();const g=i=>e.target.elements[i];try{await api('/mixes','POST',{mix_name:g('mn').value.trim(),mix_date:g('md').value,mix_time:g('mt').value,whey_protein:+g('w').value,creatine:+g('cr').value,preworkout:+g('pw').value,auto_dispense:g('au').checked});view('mix')}catch(x){e.target.querySelector('.err').textContent=x.message}return false}
+async function delMix(id){await api('/mixes/'+id,'DELETE');view('mix')}
+async function mixNow(id){const m=(await api('/mixes')).find(x=>x.mix_id===id);if(!confirm(`Mix “${m.mix_name}”?\nWhey ${m.whey_protein} g, creatine ${m.creatine} g, pre-workout ${m.preworkout} g`))return;try{await api('/device/dispense','POST',{mix_id:id});alert('Dispensed. Check the Device page for the new levels.')}catch(x){alert(x.message)}}
+async function devAct(p,m,b){try{await api(p,m,b)}catch(x){alert(x.message)}view('dev')}
+const nowHM=(plus=0)=>{const d=new Date(Date.now()+plus*6e4);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+VIEWS.dash=async function(el){const day=today(),[d,sg,al]=await Promise.all([api('/logs?day='+day),api('/suggestion?day='+day),api('/alerts?day='+day)]),t=ME.targets||{};
+ const r=(n,k,u)=>`<div class="card" style="text-align:center"><div class="ring" style="--p:${Math.min(pct(d.totals[k],t[k]),100)}"><b>${pct(d.totals[k],t[k])}%</b></div><p style="margin:10px 0 0;font-weight:600">${n}</p><small class="sub">${Math.round(d.totals[k])} of ${t[k]}${u}</small></div>`;
+ const left=Math.round(t.calories-d.totals.calories);
+ el.innerHTML=`<h1>Good day, ${esc(ME.username)}</h1><p class="sub">Your estimated daily energy use (TDEE) is ${ME.tdee} kcal. ${left>=0?left+' kcal remaining today.':'You are '+(-left)+' kcal over your target today.'}</p>
+ ${al.length?`<div class="card"><b>Alerts</b>${al.map(a=>`<p style="margin:8px 0">${esc(a.text)}</p>`).join('')}</div>`:''}
+ <div class="grid">${r('Calories','calories',' kcal')}${r('Protein','protein',' g')}${r('Carbs','carbs',' g')}${r('Fat','fat',' g')}</div>
+ ${sg.needed?`<div class="card"><b>Suggested supplement</b><p class="sub" style="margin:6px 0 10px">${esc(sg.message)}</p><label class="f" for="st" style="margin-top:0">Time</label><input class="in" id="st" type="time" value="${nowHM(30)}" style="max-width:160px"><button class="btn" style="width:auto;padding:12px 24px;margin:12px 0 0" onclick="acceptSuggestion(${sg.whey},'${day}')">Add ${sg.whey} g whey to my schedule</button></div>`:'<div class="card"><b>Supplements</b><p class="sub" style="margin:6px 0 0">No supplement needed right now. Keep logging your meals.</p></div>'}`};
+VIEWS.rep=async function(el){const r=await api('/report?days=7&end='+today()),t=ME.targets||{};
+ const max=Math.max(t.calories||0,...r.map(x=>x.calories),1),avg=k=>Math.round(r.reduce((a,x)=>a+x[k],0)/r.length);
+ el.innerHTML=`<h1>Weekly report</h1><p class="sub">Last 7 days. Your daily target is ${t.calories} kcal; amber bars are days over it.</p><div class="card"><div style="display:flex;align-items:flex-end;gap:8px;height:150px;border-bottom:1px solid #d9cfba">${r.map(x=>`<div style="flex:1;height:${Math.max(2,Math.round(x.calories/max*140))}px;background:${x.calories>t.calories?'#E0A800':'var(--green)'};border-radius:6px 6px 0 0" title="${x.calories} kcal"></div>`).join('')}</div><div style="display:flex;gap:8px;margin-top:4px">${r.map(x=>`<small class="sub" style="flex:1;text-align:center">${x.day.slice(5)}</small>`).join('')}</div></div>
+ <div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr><th>Date</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th><th>Meals</th></tr></thead><tbody>${r.map(x=>`<tr><td>${x.day}</td><td>${Math.round(x.calories)}</td><td>${Math.round(x.protein)} g</td><td>${Math.round(x.carbs)} g</td><td>${Math.round(x.fat)} g</td><td>${x.meals}</td></tr>`).join('')}</tbody><tfoot><tr><th>Daily average</th><th>${avg('calories')}</th><th>${avg('protein')} g</th><th>${avg('carbs')} g</th><th>${avg('fat')} g</th><th></th></tr></tfoot></table></div>`};
+function foodBlock(day){return `<div class="card"><b>Find a food</b><label class="f" for="fq" style="margin-top:10px">Search</label><input class="in" id="fq" placeholder="Try rice, egg or banana" oninput="findFood(this.value,'${day}')"><div id="fres"></div></div><div class="card"><b>Packaged food barcode</b><p class="sub" style="margin:6px 0 0">Type the number printed under the bars and the grams you ate.</p><div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap"><input class="in" id="bc" inputmode="numeric" placeholder="Barcode number" aria-label="Barcode number" style="max-width:240px"><input class="in" id="bg" type="number" min="1" value="100" aria-label="Grams eaten" style="max-width:110px"><button class="btn" style="width:auto;padding:12px 24px;margin:0" onclick="lookupBarcode('${day}')">Look up</button></div><p class="err" id="bce" role="alert"></p></div>`}
+async function findFood(q,day){const r=q.trim()?await api('/foods?q='+encodeURIComponent(q)):[];window.FR=r;$('fres').innerHTML=r.length?r.map((f,i)=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #e6dccb"><span><b>${esc(f.name)}</b><br><small class="sub">${esc(f.serving)}: ${f.calories} kcal, ${f.protein} g protein, ${f.carbs} g carbs, ${f.fat} g fat</small></span><button class="link" onclick="addFood(${i},'${day}')">Add</button></div>`).join(''):(q.trim()?'<p class="sub">No match. Enter it manually below.</p>':'')}
+function addFood(i,day){const f=FR[i];return logMeal(f.name,day,f.calories,f.protein,f.carbs,f.fat)}
+async function logMeal(name,day,c,p,cb,f){try{await api('/logs','POST',{meal_name:name,day,log_time:nowHM(),calories:c,protein:p,carbs:cb,fat:f});VIEWS.nut($('view'),day)}catch(x){alert(x.message)}}
+async function lookupBarcode(day){const code=$('bc').value.replace(/\D/g,''),g=+$('bg').value||100,e=$('bce');e.textContent='';try{const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=product_name,nutriments'),j=await r.json();if(!j.product)throw 0;const n=j.product.nutriments||{},k=x=>Math.round((n[x+'_100g']||0)*g/10)/10;await logMeal((j.product.product_name||'Packaged food')+' ('+g+' g)',day,Math.round((n['energy-kcal_100g']||0)*g/100),k('proteins'),k('carbohydrates'),k('fat'))}catch{e.textContent='Product not found, or the lookup is unavailable. Use food search or enter it manually.'}}
+async function acceptSuggestion(w,day){try{await api('/mixes','POST',{mix_name:'Suggested whey protein',mix_date:day,mix_time:$('st').value,whey_protein:w,creatine:0,preworkout:0,auto_dispense:false});view('mix')}catch(x){alert(x.message)}}
+async function addLog(e,day){e.preventDefault();const g=i=>e.target.elements[i].value;try{await api('/logs','POST',{meal_name:g('m').trim(),day,log_time:g('tm'),calories:+g('c'),protein:+g('p'),carbs:+g('cb'),fat:+g('fa')});VIEWS.nut($('view'),day)}catch(x){e.target.querySelector('.err').textContent=x.message}return false}
+async function delLog(id,day){await api('/logs/'+id,'DELETE');VIEWS.nut($('view'),day)}
+</script>
+</body>
+</html>
